@@ -14,6 +14,11 @@ const booksSchema = new mongoose.Schema(
       require: true,
       trim: true,
     },
+    bookCover: {
+      type: String,
+      require: true,
+      trim: true,
+    },
     userId: {
       type: ObjectId,
       require: true,

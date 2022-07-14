@@ -1,6 +1,7 @@
 const reviewModel = require("../models/reviewModel")
 const booksModel = require("../models/booksModel")
 const validator = require('../validator/validator')
+const {uploadFile} = require("./awsController")
 
 
 // --------------------------------------------------------- REGEX --------------------------------------------------------------
@@ -14,6 +15,7 @@ const isbn13 = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
 const bookCreation = async function (req, res) {
     try {
         let requestBody = req.body;
+        //let files= req.files
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody
 
         if (!validator.isValidRequestBody(requestBody)) {
@@ -22,9 +24,14 @@ const bookCreation = async function (req, res) {
         if (!title) {
             return res.status(400).send({ status: false, message: "Title is required" })
         };
+        
         if (!validator.isValid(title)) {
             return res.status(400).send({ status: false, message: "Title is in wrong format" })
         };
+        
+        // if (req.files.length == 0) {
+        //     return res.status(400).send({ status: false, message: "bookCover is required" })
+        // };
 
         if (!excerpt) {
             return res.status(400).send({ status: false, message: "excerpt is required" })
@@ -95,7 +102,15 @@ const bookCreation = async function (req, res) {
             return res.status(400).send({ status: false, message: "ISBN already used" })
         }
 
-        const newBook = await booksModel.create(requestBody);
+        let newBook = await booksModel.create(requestBody);
+
+        
+        //AWS
+        // let uploadedFileURL = await uploadFile( files[0] )
+        // newBook = newBook.toObject()
+        // newBook["bookCover"] = uploadedFileURL
+
+
         return res.status(201).send({ status: true, message: "Book created successfully", data: newBook })
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
