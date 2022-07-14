@@ -15,7 +15,7 @@ const isbn13 = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
 const bookCreation = async function (req, res) {
     try {
         let requestBody = req.body;
-        let files= req.files
+        // let files= req.files
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = requestBody
 
         if (!validator.isValidRequestBody(requestBody)) {
@@ -103,8 +103,8 @@ const bookCreation = async function (req, res) {
         }
 
         //AWS
-        let uploadedFileURL = await uploadFile( files[0] )
-        requestBody["bookCover"] = uploadedFileURL
+        // let uploadedFileURL = await uploadFile( files[0] )
+        // requestBody["bookCover"] = uploadedFileURL
 
         let newBook = await booksModel.create(requestBody);
 
